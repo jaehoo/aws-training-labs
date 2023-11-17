@@ -1,0 +1,33 @@
+version: "3"
+services:
+  backend-retrieve-products:
+      container_name: backend-retrieve-products
+      image: dev-essentials/lab3/backend-retrieve-products:latest
+      environment:
+        - DB_SECRETS=${DB_SECRETS}
+      build:
+        context: backend-retrieve-products/.
+      ports:
+        - "5000:8080"
+  backend-create-products:
+    container_name: backend-create-products
+    image: dev-essentials/lab3/backend-create-products:latest
+    environment:
+      - DB_SECRETS=${DB_SECRETS}
+    build:
+      context: backend-create-products/.
+    ports:
+      - "5001:8080"
+  frontend-ui-products:
+    container_name: frontend-ui-products
+    image: dev-essentials/lab3/frontend-ui-products:latest
+    environment:
+      - BACKEND_RETRIEVE_URL=http://backend-retrieve-products:8080
+      - BACKEND_CREATE_URL=http://backend-create-products:8080
+    build:
+      context: frontend-ui-products/.
+    links:
+      - backend-retrieve-products
+      - backend-create-products
+    ports:
+      - "8080:8080"

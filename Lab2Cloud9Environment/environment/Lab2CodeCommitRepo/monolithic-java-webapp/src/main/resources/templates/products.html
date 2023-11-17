@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>AWS DevEssentials - Sample Monolithic WebApp</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            padding: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>LAB 2 - Updated content =)</h1>
+        <h2>Instance Information:</h2>
+        <p th:text="${localAddress}"></p>
+        <p th:text="${localHostname}"></p>
+    </div>
+    <div>
+        <h2>Add new product</h2>
+        <form action="#" th:action="@{/}" method="post">
+            <label>Name<input type="text" name="name" id="name"></input></label>
+            <label>Description<input type="text" name="description" id="description"></input></label>
+            <label>Amount<input type="text" name="amount" id="amount"></input></label>
+            <label>Price<input type="text" name="price" id="price"></input></label>
+            <input type="submit" value="Submit"></input>
+        </form>
+    </div>
+    <div th:switch="${products}">
+        <h2 th:case="null">No Products yet!</h2>
+        <div th:case="*">
+            <h2>List of Products</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${products}">
+                    <td th:text="${product.id}"></td>
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${product.description}"></td>
+                    <td th:text="${product.amount}"></td>
+                    <td th:text="${product.price}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+
+

@@ -1,0 +1,21 @@
+version: 0.2
+phases:
+    install:
+        runtime-versions:
+            java: corretto17
+    build:
+        commands:
+            - cd monolithic-java-webapp
+            - ls -la && mvn package
+    post_build:
+        commands:
+            - ls -la target/
+artifacts:
+    files:
+        - '**/monolithic-java-webapp.jar'
+        - '**/appspec.yml'
+        - '**/scripts/*'
+    discard-paths: yes
+cache:
+    paths:
+        - '/root/.m2/**/*'

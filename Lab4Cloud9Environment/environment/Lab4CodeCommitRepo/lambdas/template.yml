@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: "dynamodb-lab4-python"
+    Description: ""
+
+Parameters:
+  TABLENAME:
+    Type: String
+    Description: The DynamoDB table for storing Product information.
+    Default: 'ProductsTable'
+
+Globals:
+  Api:
+    Cors:
+      AllowOrigin: "'*'"
+      #AllowMethods: "'OPTIONS,POST,GET,POST'"
+      AllowHeaders: "'Content-Type'"
+
+Resources:
+  insertProduct:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Runtime: python3.8
+      Handler: insertProducts.lambda_handler
+      CodeUri: ../lambdas
+      MemorySize: 128
+      Timeout: 300
+      Description: ''
+      Policies: AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          TABLE: !Ref TABLENAME
+      Events:
+        PutProduct:
+          Type: Api
+          Properties:
+            Path: /api/products/insert
+            Method: POST
+            
+        UpdateProduct:
+          Type: Api
+          Properties:
+            Path: /api/products/update
+            Method: POST
+
+  getAllProducts:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Runtime: python3.8
+      Handler: getAllProducts.lambda_handler
+      CodeUri: ../lambdas
+      MemorySize: 128
+      Timeout: 300
+      Description: ''
+      Policies: AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          TABLE: !Ref TABLENAME
+          REGION: !Ref "AWS::Region"
+      
+      Events:
+        getAllProduct:
+          Type: Api
+          Properties:
+            Path: /api/products/query
+            Method: GET
+
+  deleteProducts:
+    Type: "AWS::Serverless::Function"
+    Properties:
+      Runtime: python3.8
+      Handler: deleteProducts.lambda_handler
+      CodeUri: ../lambdas
+      MemorySize: 128
+      Timeout: 300
+      Description: ''
+      Policies: AmazonDynamoDBFullAccess
+      Environment:
+        Variables:
+          TABLE: !Ref TABLENAME
+          REGION: !Ref "AWS::Region"
+      
+      Events:
+        deleteProduct:
+          Type: Api
+          Properties:
+            Path: /api/products/delete
+            Method: POST
